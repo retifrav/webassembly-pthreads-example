@@ -1,8 +1,22 @@
-# WebAssembly with pthreads
+# WebAssembly with pthreads example
 
-<https://web.dev/articles/webassembly-threads>
+An example of a C++ project compiling to WebAssembly with pthreads.
+
+More details in the [following article](https://decovar.dev/blog/2023/11/16/webassembly-with-pthreads/) (*not published yet*).
+
+<!-- MarkdownTOC -->
+
+- [Emscripten](#emscripten)
+- [Building](#building)
+    - [Without CMake](#without-cmake)
+    - [With CMake](#with-cmake)
+- [Running](#running)
+
+<!-- /MarkdownTOC -->
 
 ## Emscripten
+
+You need to have Emscripten installed in your system:
 
 ``` sh
 $ cd /path/to/programs
