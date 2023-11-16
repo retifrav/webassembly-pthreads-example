@@ -1,16 +1,6 @@
 #include <iostream>
-#include <unistd.h>
 
 #include "some-shit.h"
-
-void doSome(int taskID)
-{
-    sleep(2);
-
-    std::cout << "ololo, inside the task #" << taskID << std::endl;
-
-    doShit();
-}
 
 int main()
 {
@@ -18,7 +8,7 @@ int main()
 
     for (int t = 0; t < numberOfTasks; t++)
     {
-        doSome(t);
+        doShit(t, false);
     }
 
     return EXIT_SUCCESS;

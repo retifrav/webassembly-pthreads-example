@@ -3,6 +3,6 @@
 
 const int numberOfTasks = 10;
 
-void doShit();
+void doShit(int someID, bool isAThread);
 
 #endif // SOMESHIT_H

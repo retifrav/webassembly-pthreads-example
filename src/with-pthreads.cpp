@@ -1,18 +1,11 @@
 #include <iostream>
-#include <unistd.h>
 #include <pthread.h>
 
 #include "some-shit.h"
 
 void *threadCallback(void *arg)
 {
-    sleep(2);
-
-    // using std::cout messes up the output
-    //std::cout << "ololo, inside a thread, batch ID:" << *(int *)arg << std::endl;
-    printf("ololo, inside a thread, batch ID: %d\n", *(int *)arg);
-
-    doShit();
+    doShit(*(int *)arg, true);
 
     return NULL;
 }
