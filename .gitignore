@@ -1,0 +1,9 @@
+.cache
+
+build
+install
+certificates
+
+*.sublime-workspace
+
+compile_commands.json

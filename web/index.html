@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>WebAssembly with pthreads</title>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div id="statuses">
+        <div class="spinner" id="spinner"></div>
+        <div class="emscripten" id="status">Downloading...</div>
+    </div>
+
+    <textarea id="output" rows="12"></textarea>
+
+    <script src="./init.js"></script>
+
+    <script async>
+        let pthreadsSupported = false;
+
+        const sharedArrayBufferSupported = typeof SharedArrayBuffer !== "undefined";
+        console.debug(`SharedArrayBuffer supported: ${sharedArrayBufferSupported}`);
+        try
+        {
+            if(sharedArrayBufferSupported && typeof MessageChannel !== "undefined")
+            {
+                console.debug("Testing for MessageChannel/postMessage in case of Firefox...");
+                // test for transferability of SABs (needed for Firefox)
+                // https://groups.google.com/forum/#!msg/mozilla.dev.platform/IHkBZlHETpA/dwsMNchWEQAJ
+                new MessageChannel().port1.postMessage(new SharedArrayBuffer(1));
+                pthreadsSupported = true;
+            }
+            else
+            {
+                pthreadsSupported = false;
+            }
+        }
+        catch(ex)
+        {
+            console.debug(`postMessage failed: ${ex}`);
+            pthreadsSupported = false;
+        }
+
+        console.debug(`WASMT (WebAssembly with pthreads) supported: ${pthreadsSupported}`);
+
+        // if (pthreadsSupported === true) { import("./some-with-pthreads.js"); }
+        // else { import("./some-without-pthreads.js"); }
+
+        const wasmURL = pthreadsSupported === true
+            ? "./some-with-pthreads.js"
+            : "./some-without-pthreads.js";
+        console.debug(`Variant to load: ${wasmURL}`);
+
+        let scrpt = document.createElement("script");
+        //scrpt.type = "text/javascript";
+        scrpt.src = wasmURL;
+        document.body.appendChild(scrpt);
+    </script>
+</body>
+
+</html>
