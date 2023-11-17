@@ -7,8 +7,8 @@ project("some"
 
 option(WITH_PTHREADS "Build with pthreads" 0)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED 1)
+# set(CMAKE_CXX_STANDARD 17)
+# set(CMAKE_CXX_STANDARD_REQUIRED 1)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
@@ -28,7 +28,7 @@ if(WITH_PTHREADS)
     # documentation says `-pthread` needs to be passed both when compiling AND linking (although it doesn't seem to have any effect)
     # https://emscripten.org/docs/porting/pthreads.html#compiling-with-pthreads-enabled
     # and without `-s PROXY_TO_PTHREAD` there will be no output from the spawned threads
-    string(APPEND CMAKE_EXE_LINKER_FLAGS " ${EMSCRIPTEN_PTHREADS_FLAGS} -s PROXY_TO_PTHREAD")
+    string(APPEND CMAKE_EXE_LINKER_FLAGS " ${EMSCRIPTEN_PTHREADS_FLAGS} -sPROXY_TO_PTHREAD")
 
     # set(THREADS_PREFER_PTHREAD_FLAG 1)
     # set(THREADS_LIBRARIES_NAME "Threads::Threads")
@@ -56,7 +56,7 @@ set_target_properties(${CMAKE_PROJECT_NAME}
     PROPERTIES
         RUNTIME_OUTPUT_NAME $<IF:$<BOOL:${WITH_PTHREADS}>,${CMAKE_PROJECT_NAME}-with-pthreads,${CMAKE_PROJECT_NAME}-without-pthreads>
         # can also be set here
-        #LINK_FLAGS "-s PROXY_TO_PTHREAD"
+        #LINK_FLAGS "-sPROXY_TO_PTHREAD"
 )
 
 if(DEFINED CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)

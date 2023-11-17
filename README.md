@@ -38,10 +38,10 @@ emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.48 (e
 ``` sh
 $ cd /path/to/project
 
-$ emcc -std=c++17 ./src/without-pthreads.cpp ./src/some-shit.cpp \
+$ emcc ./src/without-pthreads.cpp ./src/some-shit.cpp \
     -o ./web/some-without-pthreads.js
 
-$ emcc -std=c++17 ./src/with-pthreads.cpp ./src/some-shit.cpp \
+$ emcc ./src/with-pthreads.cpp ./src/some-shit.cpp \
     -o ./web/some-with-pthreads.js \
     -pthread -s PROXY_TO_PTHREAD
 ```
