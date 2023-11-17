@@ -43,7 +43,7 @@ $ emcc ./src/without-pthreads.cpp ./src/some-shit.cpp \
 
 $ emcc ./src/with-pthreads.cpp ./src/some-shit.cpp \
     -o ./web/some-with-pthreads.js \
-    -pthread -s PROXY_TO_PTHREAD
+    -pthread -sPROXY_TO_PTHREAD
 ```
 
 ### With CMake

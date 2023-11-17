@@ -12,6 +12,10 @@ option(WITH_PTHREADS "Build with pthreads" 0)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
+# include(ProcessorCount)
+# ProcessorCount(CPU_CORES)
+# message(STATUS "CPU cores: ${CPU_CORES}")
+
 add_executable(${CMAKE_PROJECT_NAME})
 
 set(sources
@@ -28,7 +32,7 @@ if(WITH_PTHREADS)
     # documentation says `-pthread` needs to be passed both when compiling AND linking (although it doesn't seem to have any effect)
     # https://emscripten.org/docs/porting/pthreads.html#compiling-with-pthreads-enabled
     # and without `-s PROXY_TO_PTHREAD` there will be no output from the spawned threads
-    string(APPEND CMAKE_EXE_LINKER_FLAGS " ${EMSCRIPTEN_PTHREADS_FLAGS} -sPROXY_TO_PTHREAD")
+    string(APPEND CMAKE_EXE_LINKER_FLAGS " ${EMSCRIPTEN_PTHREADS_FLAGS} -sPROXY_TO_PTHREAD") # -sPTHREAD_POOL_SIZE=${CPU_CORES}
 
     # set(THREADS_PREFER_PTHREAD_FLAG 1)
     # set(THREADS_LIBRARIES_NAME "Threads::Threads")
