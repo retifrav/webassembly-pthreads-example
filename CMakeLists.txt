@@ -22,18 +22,23 @@ set(sources
     src/some-shit.cpp
 )
 
+set(EMSCRIPTEN_PTHREADS_COMPILER_FLAGS "-pthread")
+set(EMSCRIPTEN_PTHREADS_LINKER_FLAGS "${EMSCRIPTEN_PTHREADS_COMPILER_FLAGS} -sPROXY_TO_PTHREAD") # -sPTHREAD_POOL_SIZE=${CPU_CORES}
+
 if(WITH_PTHREADS)
     list(APPEND sources ${CMAKE_SOURCE_DIR}/src/with-pthreads.cpp)
 
-    set(EMSCRIPTEN_PTHREADS_FLAGS "-pthread")
+    if(EMSCRIPTEN)
+        string(APPEND CMAKE_C_FLAGS " ${EMSCRIPTEN_PTHREADS_COMPILER_FLAGS}")
+        string(APPEND CMAKE_CXX_FLAGS " ${EMSCRIPTEN_PTHREADS_COMPILER_FLAGS}")
+        # documentation says `-pthread` needs to be passed both when compiling AND linking (although it doesn't seem to have any effect)
+        # https://emscripten.org/docs/porting/pthreads.html#compiling-with-pthreads-enabled
+        # and without `-s PROXY_TO_PTHREAD` there will be no output from the spawned threads
+        string(APPEND CMAKE_EXE_LINKER_FLAGS " ${EMSCRIPTEN_PTHREADS_LINKER_FLAGS}")
+    endif()
 
-    string(APPEND CMAKE_C_FLAGS " ${EMSCRIPTEN_PTHREADS_FLAGS}")
-    string(APPEND CMAKE_CXX_FLAGS " ${EMSCRIPTEN_PTHREADS_FLAGS}")
-    # documentation says `-pthread` needs to be passed both when compiling AND linking (although it doesn't seem to have any effect)
-    # https://emscripten.org/docs/porting/pthreads.html#compiling-with-pthreads-enabled
-    # and without `-s PROXY_TO_PTHREAD` there will be no output from the spawned threads
-    string(APPEND CMAKE_EXE_LINKER_FLAGS " ${EMSCRIPTEN_PTHREADS_FLAGS} -sPROXY_TO_PTHREAD") # -sPTHREAD_POOL_SIZE=${CPU_CORES}
-
+    # Apple platforms are a special case for discovering Threads,
+    # although discovering those doesn't seem to be required
     # set(THREADS_PREFER_PTHREAD_FLAG 1)
     # set(THREADS_LIBRARIES_NAME "Threads::Threads")
     # if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
@@ -59,9 +64,14 @@ target_sources(${CMAKE_PROJECT_NAME}
 set_target_properties(${CMAKE_PROJECT_NAME}
     PROPERTIES
         RUNTIME_OUTPUT_NAME $<IF:$<BOOL:${WITH_PTHREADS}>,${CMAKE_PROJECT_NAME}-with-pthreads,${CMAKE_PROJECT_NAME}-without-pthreads>
-        # can also be set here
-        #LINK_FLAGS "-sPROXY_TO_PTHREAD"
 )
+# linker flags can also be set here instead of CMAKE_EXE_LINKER_FLAGS
+# if(EMSCRIPTEN)
+#     set_target_properties(${CMAKE_PROJECT_NAME}
+#         PROPERTIES
+#             LINK_FLAGS "${EMSCRIPTEN_PTHREADS_LINKER_FLAGS}"
+#     )
+# endif()
 
 if(DEFINED CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(INSTALLATION_PREFIX $<IF:$<BOOL:${EMSCRIPTEN}>,${CMAKE_SOURCE_DIR}/web,${CMAKE_SOURCE_DIR}/install>)
