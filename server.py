@@ -13,8 +13,13 @@ if sys.version_info < (3, 8):
         ))
     )
 
+currentPath = pathlib.Path(__file__).resolve().parent
+
 
 class HttpRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=currentPath/"web", **kwargs)
+
     extensions_map = {
         ".html": "text/html",
         ".css": "text/css",
@@ -41,10 +46,9 @@ class HttpRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Content-Encoding", "gzip")
 
 
-currentPath = pathlib.Path(__file__).resolve().parent
-certificate = currentPath.parent / "certificates/" / "localhost.crt"
-key = currentPath.parent / "certificates/" / "localhost.key"
-certificatePassword = "CERTIFICATE-PASSWORD-IF-ANY"
+certificate = currentPath / "certificates/" / "localhost.crt"
+key = currentPath / "certificates/" / "localhost.key"
+# certificatePassword = "CERTIFICATE-PASSWORD-IF-ANY"
 
 host = "127.0.0.1"
 port = 8000

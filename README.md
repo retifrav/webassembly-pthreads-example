@@ -63,6 +63,6 @@ $ cmake --build . --target install
 ## Running
 
 ``` sh
-$ cd /path/to/project/web
+$ cd /path/to/project
 $ python ./server.py
 ```
