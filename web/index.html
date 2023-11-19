@@ -29,7 +29,7 @@
             if(sharedArrayBufferSupported && typeof MessageChannel !== "undefined")
             {
                 console.debug("Testing for MessageChannel/postMessage in case of Firefox...");
-                // test for transferability of SABs (needed for Firefox)
+                // test for transferability of SharedArrayBuffer
                 // https://groups.google.com/forum/#!msg/mozilla.dev.platform/IHkBZlHETpA/dwsMNchWEQAJ
                 new MessageChannel().port1.postMessage(new SharedArrayBuffer(1));
                 pthreadsSupported = true;
@@ -50,6 +50,7 @@
         // if (pthreadsSupported === true) { import("./some-with-pthreads.js"); }
         // else { import("./some-without-pthreads.js"); }
 
+        // fallback to the variant without pthreads
         const wasmURL = pthreadsSupported === true
             ? "./some-with-pthreads.js"
             : "./some-without-pthreads.js";
