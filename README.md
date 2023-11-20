@@ -2,7 +2,7 @@
 
 An example of a C++ project compiling to WebAssembly with pthreads.
 
-More details in the [following article](https://decovar.dev/blog/2023/11/16/webassembly-with-pthreads/) (*not published yet*).
+More details in the [following article](https://decovar.dev/blog/2023/11/20/webassembly-with-pthreads/).
 
 <!-- MarkdownTOC -->
 
