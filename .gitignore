@@ -2,7 +2,6 @@
 
 build
 install
-certificates
 
 *.sublime-workspace
 
