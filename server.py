@@ -46,8 +46,8 @@ class HttpRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Content-Encoding", "gzip")
 
 
-certificate = currentPath / "certificates/" / "localhost.crt"
-key = currentPath / "certificates/" / "localhost.key"
+certificate = currentPath / "certificates" / "localhost.crt"
+key = currentPath / "certificates" / "localhost.key"
 # certificatePassword = "CERTIFICATE-PASSWORD-IF-ANY"
 
 host = "127.0.0.1"
